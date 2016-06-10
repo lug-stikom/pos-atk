@@ -1,9 +1,10 @@
-import controller.PengurusController;
+import view.LoginForm;
 
 public class Launcher {
 	public static String Log = "";
 	public static boolean adm = false;
 	public static void main(String [] x){
-		PengurusController.doLogin("13410100082", "");
+		LoginForm auth = new LoginForm();
+		auth.setVisible(true);
 	}
 }
