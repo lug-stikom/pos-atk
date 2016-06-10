@@ -86,15 +86,7 @@ public final class LoginForm extends Frame {
 		this.setLocationRelativeTo(null);
 	}
 	
-	private void initFunction() {
-		this.addWindowListener(new WindowAdapter() {			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				LoginForm.this.dispose();
-			}
-		});
-		
+	private void initFunction() {		
 		btnLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -102,6 +94,7 @@ public final class LoginForm extends Frame {
 				Pengurus pengurus =  PengurusController.doLogin(txtNim.getText(), txtPassword.getText());
 				if (pengurus != null) {
 					AppHelper.setSesion(pengurus);
+					LoginForm.this.dispose();
 				}
 				else {
 					JOptionPane.showMessageDialog(LoginForm.this, "Sorry, you have no credential here", "Authentication Failed", JOptionPane.ERROR_MESSAGE);
