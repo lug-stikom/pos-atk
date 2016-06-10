@@ -3,7 +3,13 @@ package helper;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public final class ConnectionHelper {
+import org.active.record.java.db.connections.DatabaseConnectionHandler;
+
+public final class ConnectionHelper extends DatabaseConnectionHandler{
+	private static final String HOST = "repo.stikom.edu";
+	private static final String DB = "lug_printing";
+	private static final String USER = "printing";
+	private static final String PASS = "JkEu4Hq4G5QdUpzF";
 	private static Connection conn = null;
 	
 	private static void connect() {
@@ -12,8 +18,8 @@ public final class ConnectionHelper {
             // broken Java implementations
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection("jdbc:mysql://192.168.1.1/lug_printing?" +
-            	                                   "user=printing&password=JkEu4Hq4G5QdUpzF");
+            conn = DriverManager.getConnection("jdbc:mysql://" + HOST + "/" + DB + "?" +
+            	                                   "user=" + USER + "&password=" + PASS);
         } catch (Exception ex) {
             // handle the error
         	System.out.println(ex.getMessage());
