@@ -3,15 +3,22 @@ package view;
 import helper.AppHelper;
 import helper.UIHelper;
 
+import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Label;
+import java.awt.List;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import bean.Pengurus;
 import controller.PengurusController;
@@ -22,8 +29,8 @@ public class TransactionForm extends Frame {
 	////////////////////////////////////////////////////////
 
 	private static TransactionForm mInstance;
-	private Label lblNim, lblPassword;
-	private TextField txtNim, txtPassword;
+	private JTable lsSummary, lsProduct;
+	private Label lblSummary, lblTotal;
 	private Button btnLogin;
 
 	public TransactionForm() {
@@ -45,66 +52,62 @@ public class TransactionForm extends Frame {
 		Font f = new Font(Font.SANS_SERIF, Font.BOLD, 16);
 		Font f2 = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 
-		//init label NIM
-		lblNim = new Label("NIM");
-		lblNim.setSize(100, 16);
-		lblNim.setLocation(10, 10);
-		lblNim.setFont(f);
-		this.add(lblNim);
-		
-		//init label Password
-		lblPassword = new Label("Password");
-		lblPassword.setSize(100, 16);
-		lblPassword.setFont(f);
-		UIHelper.bottomOf(lblNim, lblPassword, 10);
-		this.add(lblPassword);
+		//init label Summary
+		lblSummary = new Label("Order Summary");
+		lblSummary.setSize(160, 16);
+		lblSummary.setLocation(10, 10);
+		lblSummary.setFont(f);
+		this.add(lblSummary);
 
-		//init text NIM
-		txtNim = new TextField();
-		txtNim.setSize(120, 21);
-		txtNim.setFont(f2);
-		UIHelper.rightOf(lblNim, txtNim, 10);
-		txtNim.setLocation(txtNim.getX(), txtNim.getY() - 5);
-		this.add(txtNim);
-		
-		//init text Password
-		txtPassword = new TextField();
-		txtPassword.setEchoChar('*');
-		txtPassword.setSize(120, 21);
-		txtPassword.setFont(f2);
-		UIHelper.bottomOf(txtNim, txtPassword, 5);
-		this.add(txtPassword);
+		//init Table Summary
+	    Vector<String> summaryColumnNames = new Vector<String>();
+	    summaryColumnNames.addElement("Type");
+	    summaryColumnNames.addElement("Product");
+	    summaryColumnNames.addElement("Qty");
+	    summaryColumnNames.addElement("Total");
 
-		//init text Password
-		btnLogin = new Button("Login");
-		btnLogin.setFont(f2);
-		btnLogin.setSize(txtPassword.getX() + txtPassword.getWidth() - 9, 25);
-		UIHelper.bottomOf(lblPassword, btnLogin, 10);
-		this.add(btnLogin);
+	    lsSummary = new JTable(new DefaultTableModel(summaryColumnNames, 0));
+
+		JScrollPane summaryScrollPane = new JScrollPane(lsSummary);
+		summaryScrollPane.setSize(500, 160);
+		UIHelper.bottomOf(lblSummary, summaryScrollPane, 10);
+	    this.add(summaryScrollPane);
+
+		//init label Total
+		lblTotal = new Label("Rp 170.000");
+		lblTotal.setSize(150, 16);
+		lblTotal.setFont(f);
+		lblTotal.setAlignment(2);
+		lblTotal.setLocation(summaryScrollPane.getX() + summaryScrollPane.getWidth() - lblTotal.getWidth(), lblSummary.getY());
+		this.add(lblTotal);
+
+		//init Table Summary
+	    Vector<String> productColumnNames = new Vector<String>();
+	    productColumnNames.addElement("Type");
+	    productColumnNames.addElement("Product");
+	    productColumnNames.addElement("Price");
+
+	    lsProduct = new JTable(new DefaultTableModel(productColumnNames, 0));
+
+		JScrollPane productScrollPane = new JScrollPane(lsProduct);
+		productScrollPane.setSize(370, lblTotal.getHeight() + summaryScrollPane.getHeight() + 10);
+		UIHelper.rightOf(lblTotal, productScrollPane, 10);
+	    this.add(productScrollPane);
 
 		// init window
 		this.setTitle("Transaction");
 		this.setLayout(null);
-		this.setSize(txtPassword.getX() + txtPassword.getWidth() + 10, 
-						btnLogin.getY() + btnLogin.getHeight() + 10);
+		this.setSize(900, 500);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 	}
 	
-	private void initFunction() {		
-		btnLogin.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Pengurus pengurus =  PengurusController.doLogin(txtNim.getText(), txtPassword.getText());
-				if (pengurus != null) {
-					AppHelper.setSesion(pengurus);
-					TransactionForm.this.dispose();
-				}
-				else {
-					JOptionPane.showMessageDialog(TransactionForm.this, "Sorry, you have no credential here", "Authentication Failed", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
+	private void initFunction() {
+		
+	}
+	
+	private void addToSummary(String type, String product, String qty, String total) {
+	    DefaultTableModel model = (DefaultTableModel)lsSummary.getModel();
+	    model.addRow(new Object[] {type, product, qty, total});
 	}
 }
