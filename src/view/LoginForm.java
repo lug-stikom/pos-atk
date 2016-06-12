@@ -4,15 +4,12 @@ import helper.AppHelper;
 import helper.UIHelper;
 
 import java.awt.Button;
-import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
@@ -20,6 +17,10 @@ import bean.Pengurus;
 import controller.PengurusController;
 
 public final class LoginForm extends Frame {
+	////////////////////////////////////////////////////////
+	/**/private static final long serialVersionUID = 1L;/**/
+	////////////////////////////////////////////////////////
+	
 	private static LoginForm mInstance;
 	private Label lblNim, lblPassword;
 	private TextField txtNim, txtPassword;
@@ -33,6 +34,10 @@ public final class LoginForm extends Frame {
 	}
 
 	public static synchronized LoginForm getInstance() {
+		if (mInstance == null) {
+			mInstance = new LoginForm();
+		}
+		
 		return mInstance;
 	}
 	
@@ -101,5 +106,10 @@ public final class LoginForm extends Frame {
 				}
 			}
 		});
+	}
+	
+	public void reset() {
+		txtNim.setText("");
+		txtPassword.setText("");
 	}
 }
